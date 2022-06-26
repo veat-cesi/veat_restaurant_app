@@ -1,11 +1,8 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    
+
+    <sidebar-menu :menu="menu" />
+
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -24,6 +21,9 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { SidebarMenu } from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+
 
 export default defineComponent({
   name: 'HomePage',
@@ -32,7 +32,33 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    SidebarMenu,
+  },
+  data() {
+    return {
+      menu: [
+        {
+          header: 'VEAT RESTAURANTS',
+          hiddenOnCollapse: true
+        },
+        {
+          href: '/dashboard',
+          title: 'Dashboard',
+          icon: 'fa fa-chart-line',
+        },
+        {
+          href: '/products',
+          title: 'Produits',
+          icon: 'fa fa-utensils',
+        },
+        {
+          href: '/commands',
+          title: 'Commandes',
+          icon: 'fa fa-basket-shopping',
+        }
+      ]
+    }
   }
 });
 </script>
