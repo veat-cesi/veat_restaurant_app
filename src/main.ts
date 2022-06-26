@@ -24,7 +24,9 @@ import '@ionic/vue/css/display.css';
 import './theme/variables.css';
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    animated: false,
+  })
   .use(router);
   
 router.isReady().then(() => {

@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
-import HomePage from '@/views/HomePage.vue'
+import DashboardPage from '@/views/DashboardPage.vue'
 
-describe('HomePage.vue', () => {
+describe('DashboardPage.vue', () => {
   it('renders home vue', () => {
-    const wrapper = mount(HomePage)
+    const wrapper = mount(DashboardPage)
     expect(wrapper.text()).toMatch('Ready to create an app?')
   })
 })
