@@ -1,0 +1,7 @@
+{
+  "name": "veat_restaurant_app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
