@@ -20,7 +20,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/products',
     name: 'Products',
-    component: ProductPage
+    component: ProductPage,
+    props:{
+      id: "62ba76e3d6c6c9cc09ba20c4"
+    }
   },
   {
     path: '/commands',
