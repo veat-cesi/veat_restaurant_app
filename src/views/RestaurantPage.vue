@@ -5,42 +5,44 @@
 
     <ion-content :fullscreen="true">
       <div id="container">
-        <form id="restaurant" @submit="checkForm" method="post">
+        <form id="restaurant">
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Nom du Restaurant" name="name" id='name' v-model="name" required />
+            <input type="text" class="form__field" placeholder="Nom du Restaurant" name="name" id='name' v-model="restaurant.name" required />
             <label for="name" class="form__label">Nom du Restaurant</label>
           </div>
           <div class="form__group field">
-            <input type="email" class="form__field" placeholder="Email" name="email" id='email' v-model="email" required />
+            <input type="email" class="form__field" placeholder="Email" name="email" id='email' v-model="restaurant.email" required />
             <label for="email" class="form__label">Email</label>
           </div>
           <div class="form__group field">
-            <input type="tel" class="form__field" placeholder="Téléphone" name="phone" id='phone' v-model="phone" required />
+            <input type="tel" class="form__field" placeholder="Téléphone" name="phone" id='phone' v-model="restaurant.phone" required />
             <label for="phone" class="form__label">Téléphone</label>
           </div>
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Ville" name="city" id='city' v-model="city" required />
+            <input type="text" class="form__field" placeholder="Ville" name="city" id='city' v-model="restaurant.city" required />
             <label for="city" class="form__label">Ville</label>
           </div>
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Adresse" name="address" id='address' v-model="address" required />
+            <input type="text" class="form__field" placeholder="Adresse" name="address" id='address' v-model="restaurant.address" required />
             <label for="address" class="form__label">Adresse</label>
           </div>
-          <input
-              type="submit"
-              value="Submit"
-          >
+          <div class="form__group field">
+            Image :
+            <input type="file" id="img" @change="toDataUrl">
+          </div>
+          <input type="button" @click="submit" value="Enregistrer">
         </form>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="js">
-import { IonContent, IonPage } from '@ionic/vue';
+<script lang="ts">
+import { IonContent, IonPage, toastController } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { SidebarMenu } from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import axios from 'axios';
 
 
 export default defineComponent({
@@ -50,6 +52,7 @@ export default defineComponent({
     IonPage,
     SidebarMenu,
   },
+  props: ["id"],
   data() {
     return {
       menu: [
@@ -78,31 +81,61 @@ export default defineComponent({
           icon: 'fa fa-basket-shopping',
         },
       ],
-      name: null,
-      email: null,
-      phone: null,
-      city: null,
-      address: null,
+      restaurantId: {...this.id},
+      restaurant: {
+        id:null,
+        name: null,
+        email: null,
+        phone: null,
+        city: null,
+        address: null,
+        img: null,
+      },
       errors: [],
     }
   },
   methods:{
-    checkForm: function (e) {
-      if (this.name && this.age) {
-        return true;
+    getRestaurant: async function(){
+      const response = await axios.get("http://localhost:3000/getRestaurantById/"+this.id)
+      this.restaurant = response.data
+    },
+    async openToast() {
+      const toast = await toastController
+          .create({
+            message: 'Your settings have been saved.',
+            duration: 2000
+          })
+      return toast.present();
+    },
+    submit: async function () {
+      const response = await axios.post("http://localhost:3000/updateRestaurant",{
+        restaurantId: this.restaurant.id,
+        restaurant: this.restaurant
+      });
+      this.openToast()
+    },
+    toDataUrl: function(img: any){
+      const selectedImage = img.target.files[0];
+      let dataURL = null;
+      const reader = new FileReader();
+
+      reader.addEventListener("load", function () {
+        // on convertit l'image en une chaîne de caractères base64
+        dataURL = reader.result;
+      }, false);
+
+      if (selectedImage) {
+        reader.readAsDataURL(selectedImage);
       }
 
-      this.errors = [];
-
-      if (!this.name) {
-        this.errors.push('Name required.');
+      if(dataURL){
+        this.restaurant.img = dataURL;
+        console.log(this.restaurant.img)
       }
-      if (!this.age) {
-        this.errors.push('Age required.');
-      }
-      console.log(this.name);
-      e.preventDefault();
-    }
+    },
+  },
+  mounted() {
+    this.getRestaurant()
   }
 });
 </script>
