@@ -4,48 +4,76 @@
     <sidebar-menu :menu="menu" />
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <div id="container" style="margin-left: 100px">
+        <ion-row>
+          <ion-col class="light-bg ion-padding-start">
+            <ion-text color="dark">
+              <h4>
+                <strong>
+                  Liste des Produits
+                </strong>
+              </h4>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="light-bg ion-padding-start" v-for="(category, categoryKey) in products" :key="categoryKey">
+          <ion-col size="2"></ion-col>
+          <ion-col size="4" class="border-bottom" v-if="category!=null">
+            <div class="form__group field">
+              <input type="text" class="form__field" placeholder="Nom du Restaurant" name="category" id='category' v-model="category.category" required />
+              <ion-label for="category" class="form__label">Nom de la catégorie</ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="2" style="padding-top: 15px">
+            <ion-button color="success">Voir les produits</ion-button>
+          </ion-col>
+          <ion-col size="2" style="padding-top: 15px">
+            <ion-button color="danger" @click="deleteCategory">Supprimer la catégorie</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="light-bg ion-padding-start" style="padding-left: 120px">
+          <ion-col size="5" class="border-bottom">
+          </ion-col>
+          <ion-col  style="padding-top: 15px">
+            <ion-button>Ajouter une nouvelle catégorie</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-footer class="light-bg ion-padding-start">
+          <ion-button>Enregistrer</ion-button>
+        </ion-footer>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonPage, IonCol, IonRow, IonLabel, IonButton, IonText, IonFooter } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { SidebarMenu } from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import axios from "axios";
 
 
 export default defineComponent({
   name: 'ProductPage',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
+    IonCol,
+    IonRow,
+    IonLabel,
+    IonButton,
+    IonText,
+    IonFooter,
     SidebarMenu,
   },
+  props:["id"],
   data() {
     return {
       menu: [
         {
           header: 'VEAT RESTAURANTS',
           hiddenOnCollapse: true
-        },
-        {
-          href: '/dashboards',
-          title: 'Dashboard',
-          icon: 'fa fa-chart-line',
         },
         {
           href: '/restaurant',
@@ -62,8 +90,43 @@ export default defineComponent({
           title: 'Commandes',
           icon: 'fa fa-basket-shopping',
         },
+      ],
+      restaurantId: {...this.id},
+      products: [
+        {
+          id: null,
+          category: null,
+          meal: [
+            {
+              name: null,
+              price: null,
+              info: null,
+              img: null,
+            }
+          ]
+        }
       ]
     }
+  },
+  methods:{
+    getProduct: async function(){
+      const response = await axios.get("http://localhost:3000/getProductsByRestaurantId/"+this.id);
+      this.products = response.data;
+    },
+    addCategory(){
+      console.log('add');
+    },
+    updateCategory(){
+      console.log('update');
+    },
+    deleteCategory: async function(id: string){
+      console.log('delete');
+      const response = await axios.delete("http://localhost:3000/deleteCategory/"+id);
+      this.products = response.data;
+    },
+  },
+  mounted() {
+    this.getProduct();
   }
 });
 </script>
@@ -72,28 +135,80 @@ export default defineComponent({
 #container {
   text-align: center;
 
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 50%;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.3rem;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
 }
 
-#container a {
-  text-decoration: none;
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, var(--ion-color-primary));
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: var(--ion-color-primary);
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+
+/* demo */
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
 }
 </style>
