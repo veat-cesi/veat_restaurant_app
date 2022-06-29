@@ -25,21 +25,26 @@
             </div>
           </ion-col>
           <ion-col size="2" style="padding-top: 15px">
-            <ion-button color="success">Voir les produits</ion-button>
+            <ion-button color="success" :router-link="'/products/detail/'+category.id">Voir les produits</ion-button>
           </ion-col>
           <ion-col size="2" style="padding-top: 15px">
-            <ion-button color="danger" @click="deleteCategory">Supprimer la catégorie</ion-button>
+            <ion-button color="danger" @click="deleteCategory(category)">Supprimer la catégorie</ion-button>
           </ion-col>
         </ion-row>
-        <ion-row class="light-bg ion-padding-start" style="padding-left: 120px">
-          <ion-col size="5" class="border-bottom">
+        <ion-row class="light-bg ion-padding-start">
+          <ion-col size="2"></ion-col>
+          <ion-col size="" class="border-bottom">
+            <div class="form__group field">
+              <input type="text" class="form__field" placeholder="Nom du Restaurant" name="category" id='category' v-model="newCategory" required />
+              <ion-label for="category" class="form__label">Nom de la nouvelle catégorie</ion-label>
+            </div>
           </ion-col>
-          <ion-col  style="padding-top: 15px">
-            <ion-button>Ajouter une nouvelle catégorie</ion-button>
+          <ion-col  style="padding-top: 15px; padding-right: 150px">
+            <ion-button @click="addCategory(newCategory)">Ajouter une nouvelle catégorie</ion-button>
           </ion-col>
         </ion-row>
         <ion-footer class="light-bg ion-padding-start">
-          <ion-button>Enregistrer</ion-button>
+          <ion-button @click="updateCategory">Enregistrer</ion-button>
         </ion-footer>
       </div>
     </ion-content>
@@ -105,7 +110,8 @@ export default defineComponent({
             }
           ]
         }
-      ]
+      ],
+      newCategory: null,
     }
   },
   methods:{
@@ -113,15 +119,24 @@ export default defineComponent({
       const response = await axios.get("http://localhost:3000/getProductsByRestaurantId/"+this.id);
       this.products = response.data;
     },
-    addCategory(){
-      console.log('add');
+    async addCategory(category: string){
+      const response = await axios.post("http://localhost:3000/addCategory", {
+        restaurantId: this.id,
+        category: category,
+      });
+      this.products = response.data;
+      this.newCategory = null;
+
     },
-    updateCategory(){
-      console.log('update');
+    async updateCategory(category: string){
+      const response = await axios.post("http://localhost:3000/updateCategory", {
+        restaurantId: this.id,
+        products: this.products
+      });
+      this.products = response.data;
     },
-    deleteCategory: async function(id: string){
-      console.log('delete');
-      const response = await axios.delete("http://localhost:3000/deleteCategory/"+id);
+    deleteCategory: async function(product: any){
+      const response = await axios.post("http://localhost:3000/deleteCategory", {product: product});
       this.products = response.data;
     },
   },

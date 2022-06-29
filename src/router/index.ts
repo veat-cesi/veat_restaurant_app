@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Restaurant',
     component: RestaurantPage,
     props:{
-      id: "62ba76e3d6c6c9cc09ba20c4"
+      id: "62bb018b33ee48838342f25b"
     }
   },
   {
@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Products',
     component: ProductPage,
     props:{
-      id: "62ba76e3d6c6c9cc09ba20c4"
+      id: "62bb018b33ee48838342f25b"
     }
   },
   {
