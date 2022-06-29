@@ -30,9 +30,15 @@
             <ion-button color="success" @click="setOpenModal(true)">Modifier le produit</ion-button>
           </ion-col>
           <ion-col size="1" style="padding-top: 15px">
-            <ion-button color="danger" @click="console.log()">Supprimer le produit</ion-button>
+            <ion-button color="danger" @click="deleteMeal(meal)">Supprimer le produit</ion-button>
           </ion-col>
           <meal-modal :is-open="isOpenModal" :meal="meal" @openState="this.isOpenModal = false"></meal-modal>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6"></ion-col>
+          <ion-col style="padding-top: 15px; padding-right: 60px">
+            <ion-button @click="addMeal(newMeal)">Ajouter un produit</ion-button>
+          </ion-col>
         </ion-row>
       </div>
     </ion-content>
@@ -41,12 +47,13 @@
 
 <script lang="ts">
 import {useRoute} from 'vue-router'
-import {IonCol, IonContent, IonPage, IonRow, IonText} from "@ionic/vue";
+import {IonCol, IonContent, IonPage, IonRow, IonText, IonButton} from "@ionic/vue";
 import {SidebarMenu} from "vue-sidebar-menu";
 import MealModal from "../components/MealModal.vue"
 import axios from "axios";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: "ProductDetailPage",
   props: ['restaurantId'],
   components: {
@@ -56,6 +63,7 @@ export default {
     IonCol,
     IonText,
     MealModal,
+    IonButton,
     SidebarMenu,
   },
   data() {
@@ -83,6 +91,7 @@ export default {
       ],
       productList: [],
       category: null,
+      newMeal: null,
       isOpenModal: false,
     }
   },
@@ -95,9 +104,17 @@ export default {
       const response = await axios.get("http://localhost:3000/getProductList/" + this.id);
       this.productList = response.data;
     },
-    setOpenModal: async function (state: boolean) {
+    setOpenModal: function (state: boolean) {
       this.isOpenModal = state
-    }
+    },
+    addMeal: async function(meal: any){
+      const response = await axios.post("http://localhost:3000/addMeal", {meal: meal});
+      this.productList = response.data;
+    },
+    deleteMeal: async function(meal: any){
+      const response = await axios.post("http://localhost:3000/deleteMeal", {meal: meal});
+      this.productList = response.data;
+    },
   },
   setup() {
     const route = useRoute();
@@ -108,7 +125,7 @@ export default {
     this.getCategoryName();
     this.getProduct();
   }
-}
+});
 </script>
 
 <style scoped>

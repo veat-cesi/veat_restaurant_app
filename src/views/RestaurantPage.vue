@@ -78,7 +78,7 @@ export default defineComponent({
       ],
       restaurantId: {...this.id},
       restaurant: {
-        id:null,
+        id: null,
         name: null,
         email: null,
         phone: null,
