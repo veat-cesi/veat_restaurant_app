@@ -43,11 +43,6 @@ export default defineComponent({
           hiddenOnCollapse: true
         },
         {
-          href: '/dashboards',
-          title: 'Dashboard',
-          icon: 'fa fa-chart-line',
-        },
-        {
           href: '/restaurant',
           title: 'Restaurant',
           icon: 'fa fa-store',
