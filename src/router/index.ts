@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import ProductPage from '../views/ProductPage.vue'
 import CommandPage from '../views/CommandPage.vue'
 import RestaurantPage from '../views/RestaurantPage.vue'
+import ProductDetailPage from '../views/ProductDetailPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -23,6 +24,14 @@ const routes: Array<RouteRecordRaw> = [
     component: ProductPage,
     props:{
       id: "62bb018b33ee48838342f25b"
+    },
+  },
+  {
+    path: '/products/detail/:id',
+    name: 'ProductDetail',
+    component: ProductDetailPage,
+    props:{
+      restaurantId: "62bb018b33ee48838342f25b"
     }
   },
   {
