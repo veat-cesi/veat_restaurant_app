@@ -27,7 +27,35 @@
             </ion-row>
           </ion-col>
           <ion-col size="2">
-            <ion-button color="success">Accepter</ion-button>
+            <ion-button color="success" @click="acceptOrder(order.id)">Accepter</ion-button>
+          </ion-col>
+          <ion-col size="1" style="padding-right: 250px">
+            <ion-button color="danger" @click="declineOrder(order.id)">Refuser</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="light-bg ion-padding-start">
+            <ion-text color="dark">
+              <h4>
+                <strong>
+                  Commandes en cours
+                </strong>
+              </h4>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row v-for="(order, orderKey) in orderAcceptedList" :key="orderKey">
+          <ion-col size="4"></ion-col>
+          <ion-col size="3">
+            <ion-row>
+              <ion-text>Xavier Labarbe</ion-text>
+            </ion-row>
+            <ion-row>
+              <ion-text>{{ order.id }}</ion-text>
+            </ion-row>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button color="success" @click="acceptOrder(order.id)">Accepter</ion-button>
           </ion-col>
           <ion-col size="1" style="padding-right: 250px">
             <ion-button color="danger">Refuser</ion-button>
@@ -44,7 +72,7 @@ import {defineComponent} from 'vue';
 import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import axios from "axios";
-
+import {io} from "socket.io-client";
 
 export default defineComponent({
   name: 'CommandPage',
@@ -80,16 +108,38 @@ export default defineComponent({
         },
       ],
       orderList: [],
+      orderAcceptedList:[],
+      socket: io('http://localhost:3010'),
     }
   },
   methods: {
     getOrders: async function () {
       const response = await axios.get("http://localhost:3000/getOrderListByRestaurantId/" + this.restaurantId);
       this.orderList = response.data;
+    },
+    getAcceptedOrders: async function () {
+      const response = await axios.get("http://localhost:3000/getAcceptedOrderListByRestaurantId/" + this.restaurantId);
+      this.orderAcceptedList = response.data;
+      console.log(response.data)
+    },
+    acceptOrder: async function (orderId: string) {
+      this.socket.emit('orderAcceptedByRestaurant', {orderId: orderId, restaurantId: this.restaurantId});
+      this.socket.on("refreshOrders", (data: any) => {
+        this.getOrders();
+        this.getAcceptedOrders();
+      })
+    },
+    declineOrder: async function (orderId: string) {
+      this.socket.emit('orderDeclinedByRestaurant', {orderId: orderId, restaurantId: this.restaurantId});
+      this.socket.on("refreshOrders", (data: any) => {
+        this.getOrders();
+        this.getAcceptedOrders();
+      })
     }
   },
   mounted() {
     this.getOrders()
+    this.getAcceptedOrders();
   }
 });
 </script>
