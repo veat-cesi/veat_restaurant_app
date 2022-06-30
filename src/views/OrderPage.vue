@@ -140,6 +140,10 @@ export default defineComponent({
   mounted() {
     this.getOrders()
     this.getAcceptedOrders();
+    this.socket.on("refreshOrders", (data: any) => {
+      this.getOrders();
+      this.getAcceptedOrders();
+    })
   }
 });
 </script>
