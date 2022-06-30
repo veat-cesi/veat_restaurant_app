@@ -1,7 +1,7 @@
 <template>
   <ion-page>
 
-    <sidebar-menu :menu="menu" />
+    <sidebar-menu :menu="menu"/>
 
     <ion-content :fullscreen="true">
       <div id="container" style="margin-left: 100px">
@@ -10,22 +10,24 @@
             <ion-text color="dark">
               <h4>
                 <strong>
-                  Liste des Produits
+                  Liste des Catégories
                 </strong>
               </h4>
             </ion-text>
           </ion-col>
         </ion-row>
-        <ion-row class="light-bg ion-padding-start" v-for="(category, categoryKey) in products" :key="categoryKey">
+        <ion-row v-for="(category, categoryKey) in products" :key="categoryKey" class="light-bg ion-padding-start">
           <ion-col size="2"></ion-col>
-          <ion-col size="4" class="border-bottom" v-if="category!=null">
+          <ion-col v-if="category!=null" class="border-bottom" size="4">
             <div class="form__group field">
-              <input type="text" class="form__field" placeholder="Nom du Restaurant" name="category" id='category' v-model="category.category" required />
-              <ion-label for="category" class="form__label">Nom de la catégorie</ion-label>
+              <input id='category' v-model="category.category" class="form__field" name="category"
+                     placeholder="Nom du Restaurant"
+                     required type="text"/>
+              <ion-label class="form__label" for="category">Nom de la catégorie</ion-label>
             </div>
           </ion-col>
           <ion-col size="2" style="padding-top: 15px">
-            <ion-button color="success" :router-link="'/products/detail/'+category.id">Voir les produits</ion-button>
+            <ion-button :router-link="'/products/detail/'+category.id" color="success">Voir les produits</ion-button>
           </ion-col>
           <ion-col size="2" style="padding-top: 15px">
             <ion-button color="danger" @click="deleteCategory(category)">Supprimer la catégorie</ion-button>
@@ -33,13 +35,15 @@
         </ion-row>
         <ion-row class="light-bg ion-padding-start">
           <ion-col size="2"></ion-col>
-          <ion-col size="" class="border-bottom">
+          <ion-col class="border-bottom" size="">
             <div class="form__group field">
-              <input type="text" class="form__field" placeholder="Nom du Restaurant" name="category" id='category' v-model="newCategory" required />
-              <ion-label for="category" class="form__label">Nom de la nouvelle catégorie</ion-label>
+              <input id='category' v-model="newCategory" class="form__field" name="category"
+                     placeholder="Nom du Restaurant"
+                     required type="text"/>
+              <ion-label class="form__label" for="category">Nom de la nouvelle catégorie</ion-label>
             </div>
           </ion-col>
-          <ion-col  style="padding-top: 15px; padding-right: 150px">
+          <ion-col style="padding-top: 15px; padding-right: 150px">
             <ion-button @click="addCategory(newCategory)">Ajouter une nouvelle catégorie</ion-button>
           </ion-col>
         </ion-row>
@@ -52,9 +56,9 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonCol, IonRow, IonLabel, IonButton, IonText, IonFooter } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { SidebarMenu } from 'vue-sidebar-menu'
+import {IonButton, IonCol, IonContent, IonFooter, IonLabel, IonPage, IonRow, IonText} from '@ionic/vue';
+import {defineComponent} from 'vue';
+import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import axios from "axios";
 
@@ -72,7 +76,7 @@ export default defineComponent({
     IonFooter,
     SidebarMenu,
   },
-  props:["id"],
+  props: ["id"],
   data() {
     return {
       menu: [
@@ -91,7 +95,7 @@ export default defineComponent({
           icon: 'fa fa-utensils',
         },
         {
-          href: '/commands',
+          href: '/orders',
           title: 'Commandes',
           icon: 'fa fa-basket-shopping',
         },
@@ -114,12 +118,12 @@ export default defineComponent({
       newCategory: null,
     }
   },
-  methods:{
-    getProduct: async function(){
-      const response = await axios.get("http://localhost:3000/getProductsByRestaurantId/"+this.id);
+  methods: {
+    getProduct: async function () {
+      const response = await axios.get("http://localhost:3000/getProductsByRestaurantId/" + this.id);
       this.products = response.data;
     },
-    async addCategory(category: string){
+    async addCategory(category: string) {
       const response = await axios.post("http://localhost:3000/addCategory", {
         restaurantId: this.id,
         category: category,
@@ -128,14 +132,14 @@ export default defineComponent({
       this.newCategory = null;
 
     },
-    async updateCategory(category: string){
+    async updateCategory(category: string) {
       const response = await axios.post("http://localhost:3000/updateCategory", {
         restaurantId: this.id,
         products: this.products
       });
       this.products = response.data;
     },
-    deleteCategory: async function(product: any){
+    deleteCategory: async function (product: any) {
       const response = await axios.post("http://localhost:3000/deleteCategory", {product: product});
       this.products = response.data;
     },
@@ -176,9 +180,11 @@ export default defineComponent({
   background: transparent;
   transition: border-color 0.2s;
 }
+
 .form__field::placeholder {
   color: transparent;
 }
+
 .form__field:placeholder-shown ~ .form__label {
   font-size: 1.3rem;
   cursor: text;
@@ -201,6 +207,7 @@ export default defineComponent({
   border-image: linear-gradient(to right, var(--ion-color-primary));
   border-image-slice: 1;
 }
+
 .form__field:focus ~ .form__label {
   position: absolute;
   top: 0;
