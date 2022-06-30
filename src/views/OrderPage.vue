@@ -27,7 +27,7 @@
             </ion-row>
           </ion-col>
           <ion-col size="2">
-            <ion-button color="success">Accepter</ion-button>
+            <ion-button color="success" @click="sendMessage">Accepter</ion-button>
           </ion-col>
           <ion-col size="1" style="padding-right: 250px">
             <ion-button color="danger">Refuser</ion-button>
@@ -38,13 +38,13 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import {IonButton, IonCol, IonContent, IonPage, IonRow, IonText} from '@ionic/vue';
 import {defineComponent} from 'vue';
 import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import axios from "axios";
-
+import {io} from "socket.io-client";
 
 export default defineComponent({
   name: 'CommandPage',
@@ -80,13 +80,22 @@ export default defineComponent({
         },
       ],
       orderList: [],
+      socket: null,
     }
   },
   methods: {
     getOrders: async function () {
       const response = await axios.get("http://localhost:3000/getOrderListByRestaurantId/" + this.restaurantId);
       this.orderList = response.data;
+    },
+    sendMessage: function () {
+      console.log(this.socket);
+      console.log("salut");
+      this.socket.emit('data', {data: "data"});
     }
+  },
+  created() {
+    this.socket = io('http://localhost:3010');
   },
   mounted() {
     this.getOrders()

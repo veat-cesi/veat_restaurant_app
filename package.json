@@ -23,6 +23,7 @@
     "@types/axios": "^0.14.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
+    "socket.io-client": "^4.5.1",
     "vue": "^3.2.21",
     "vue-router": "^4.0.12",
     "vue-sidebar-menu": "^5.2.4"
