@@ -1,36 +1,41 @@
 <template>
   <ion-page>
 
-    <sidebar-menu :menu="menu" />
+    <sidebar-menu :menu="menu"/>
 
     <ion-content :fullscreen="true">
       <div id="container">
         <form id="restaurant">
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Nom du Restaurant" name="name" id='name' v-model="restaurant.name" required />
-            <label for="name" class="form__label">Nom du Restaurant</label>
+            <input id='name' v-model="restaurant.name" class="form__field" name="name" placeholder="Nom du Restaurant"
+                   required type="text"/>
+            <label class="form__label" for="name">Nom du Restaurant</label>
           </div>
           <div class="form__group field">
-            <input type="email" class="form__field" placeholder="Email" name="email" id='email' v-model="restaurant.email" required />
-            <label for="email" class="form__label">Email</label>
+            <input id='email' v-model="restaurant.email" class="form__field" name="email" placeholder="Email"
+                   required type="email"/>
+            <label class="form__label" for="email">Email</label>
           </div>
           <div class="form__group field">
-            <input type="tel" class="form__field" placeholder="Téléphone" name="phone" id='phone' v-model="restaurant.phone" required />
-            <label for="phone" class="form__label">Téléphone</label>
+            <input id='phone' v-model="restaurant.phone" class="form__field" name="phone" placeholder="Téléphone"
+                   required type="tel"/>
+            <label class="form__label" for="phone">Téléphone</label>
           </div>
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Ville" name="city" id='city' v-model="restaurant.city" required />
-            <label for="city" class="form__label">Ville</label>
+            <input id='city' v-model="restaurant.city" class="form__field" name="city" placeholder="Ville" required
+                   type="text"/>
+            <label class="form__label" for="city">Ville</label>
           </div>
           <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Adresse" name="address" id='address' v-model="restaurant.address" required />
-            <label for="address" class="form__label">Adresse</label>
+            <input id='address' v-model="restaurant.address" class="form__field" name="address" placeholder="Adresse"
+                   required type="text"/>
+            <label class="form__label" for="address">Adresse</label>
           </div>
           <div class="form__group field">
             Image :
-            <input type="file" id="img" @change="toDataUrl">
+            <input id="img" type="file" @change="toDataUrl">
           </div>
-          <input type="button" @click="submit" value="Enregistrer">
+          <input type="button" value="Enregistrer" @click="submit">
         </form>
       </div>
     </ion-content>
@@ -38,9 +43,9 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, toastController } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { SidebarMenu } from 'vue-sidebar-menu'
+import {IonContent, IonPage, toastController} from '@ionic/vue';
+import {defineComponent} from 'vue';
+import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import axios from 'axios';
 
@@ -71,7 +76,7 @@ export default defineComponent({
           icon: 'fa fa-utensils',
         },
         {
-          href: '/commands',
+          href: '/orders',
           title: 'Commandes',
           icon: 'fa fa-basket-shopping',
         },
@@ -89,9 +94,9 @@ export default defineComponent({
       errors: [],
     }
   },
-  methods:{
-    getRestaurant: async function(){
-      const response = await axios.get("http://localhost:3000/getRestaurantById/"+this.id)
+  methods: {
+    getRestaurant: async function () {
+      const response = await axios.get("http://localhost:3000/getRestaurantById/" + this.id)
       this.restaurant = response.data
     },
     async openToast() {
@@ -103,13 +108,13 @@ export default defineComponent({
       return toast.present();
     },
     submit: async function () {
-      const response = await axios.post("http://localhost:3000/updateRestaurant",{
+      const response = await axios.post("http://localhost:3000/updateRestaurant", {
         restaurantId: this.restaurant.id,
         restaurant: this.restaurant
       });
       this.openToast()
     },
-    toDataUrl: function(img: any){
+    toDataUrl: function (img: any) {
       const selectedImage = img.target.files[0];
       let dataURL = null;
       const reader = new FileReader();
@@ -123,7 +128,7 @@ export default defineComponent({
         reader.readAsDataURL(selectedImage);
       }
 
-      if(dataURL){
+      if (dataURL) {
         this.restaurant.img = dataURL;
         console.log(this.restaurant.img)
       }
@@ -164,9 +169,11 @@ export default defineComponent({
   background: transparent;
   transition: border-color 0.2s;
 }
+
 .form__field::placeholder {
   color: transparent;
 }
+
 .form__field:placeholder-shown ~ .form__label {
   font-size: 1.3rem;
   cursor: text;
@@ -189,6 +196,7 @@ export default defineComponent({
   border-image: linear-gradient(to right, var(--ion-color-primary));
   border-image-slice: 1;
 }
+
 .form__field:focus ~ .form__label {
   position: absolute;
   top: 0;

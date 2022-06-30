@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import ProductPage from "../views/ProductPage.vue";
-import CommandPage from "../views/CommandPage.vue";
+import OrderPage from "../views/OrderPage.vue";
 import RestaurantPage from "../views/RestaurantPage.vue";
 import ProductDetailPage from "../views/ProductDetailPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/commands",
+    redirect: "/orders",
   },
   {
     path: "/restaurant",
     name: "Restaurant",
     component: RestaurantPage,
     props: {
-      id: "62bb018b33ee48838342f25b",
+      id: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "Products",
     component: ProductPage,
     props: {
-      id: "62bb018b33ee48838342f25b",
+      id: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
@@ -31,13 +31,16 @@ const routes: Array<RouteRecordRaw> = [
     name: "ProductDetail",
     component: ProductDetailPage,
     props: {
-      restaurantId: "62bb018b33ee48838342f25b",
+      restaurantId: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
-    path: "/commands",
-    name: "Commands",
-    component: CommandPage,
+    path: "/orders",
+    name: "OrderPage",
+    component: OrderPage,
+    props: {
+      restaurantId: "62bd7373c12cd4ee11bd7986",
+    },
   },
 ];
 

@@ -20,7 +20,8 @@
           <ion-col size="2"></ion-col>
           <ion-col v-if="category!=null" class="border-bottom" size="4">
             <div class="form__group field">
-              <input id='category' v-model="category.category" class="form__field" name="category" placeholder="Nom du Restaurant"
+              <input id='category' v-model="category.category" class="form__field" name="category"
+                     placeholder="Nom du Restaurant"
                      required type="text"/>
               <ion-label class="form__label" for="category">Nom de la catégorie</ion-label>
             </div>
@@ -36,7 +37,8 @@
           <ion-col size="2"></ion-col>
           <ion-col class="border-bottom" size="">
             <div class="form__group field">
-              <input id='category' v-model="newCategory" class="form__field" name="category" placeholder="Nom du Restaurant"
+              <input id='category' v-model="newCategory" class="form__field" name="category"
+                     placeholder="Nom du Restaurant"
                      required type="text"/>
               <ion-label class="form__label" for="category">Nom de la nouvelle catégorie</ion-label>
             </div>
@@ -93,7 +95,7 @@ export default defineComponent({
           icon: 'fa fa-utensils',
         },
         {
-          href: '/commands',
+          href: '/orders',
           title: 'Commandes',
           icon: 'fa fa-basket-shopping',
         },

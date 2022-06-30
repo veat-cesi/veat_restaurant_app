@@ -88,7 +88,7 @@ export default defineComponent({
           icon: 'fa fa-utensils',
         },
         {
-          href: '/commands',
+          href: '/orders',
           title: 'Commandes',
           icon: 'fa fa-basket-shopping',
         },
