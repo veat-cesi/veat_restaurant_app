@@ -37,9 +37,11 @@
         <ion-row>
           <ion-col size="6"></ion-col>
           <ion-col style="padding-top: 15px; padding-right: 60px">
-            <ion-button @click="addMeal(newMeal)">Ajouter un produit</ion-button>
+            <ion-button @click="setOpenAddModal(true)">Ajouter un produit</ion-button>
           </ion-col>
         </ion-row>
+        <add-meal-modal :categoryId="this.id" :is-open="isOpenAddModal"
+                        @openState="this.isOpenAddModal = false" @updateCategoryList="getProduct"></add-meal-modal>
       </div>
     </ion-content>
   </ion-page>
@@ -47,9 +49,10 @@
 
 <script lang="ts">
 import {useRoute} from 'vue-router'
-import {IonCol, IonContent, IonPage, IonRow, IonText, IonButton} from "@ionic/vue";
+import {IonButton, IonCol, IonContent, IonPage, IonRow, IonText} from "@ionic/vue";
 import {SidebarMenu} from "vue-sidebar-menu";
 import MealModal from "../components/MealModal.vue"
+import AddMealModal from "@/components/AddMealModal.vue";
 import axios from "axios";
 import {defineComponent} from "vue";
 
@@ -63,6 +66,7 @@ export default defineComponent({
     IonCol,
     IonText,
     MealModal,
+    AddMealModal,
     IonButton,
     SidebarMenu,
   },
@@ -93,6 +97,7 @@ export default defineComponent({
       category: null,
       newMeal: null,
       isOpenModal: false,
+      isOpenAddModal: false,
     }
   },
   methods: {
@@ -107,11 +112,10 @@ export default defineComponent({
     setOpenModal: function (state: boolean) {
       this.isOpenModal = state
     },
-    addMeal: async function(meal: any){
-      const response = await axios.post("http://localhost:3000/addMeal", {meal: meal});
-      this.productList = response.data;
+    setOpenAddModal: function (state: boolean) {
+      this.isOpenAddModal = state
     },
-    deleteMeal: async function(meal: any){
+    deleteMeal: async function (meal: any) {
       const response = await axios.post("http://localhost:3000/deleteMeal", {meal: meal});
       this.productList = response.data;
     },
