@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "Restaurant",
     component: RestaurantPage,
     props: {
-      id: "62bdc614ae62ea3f28d00bd6",
+      id: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "Products",
     component: ProductPage,
     props: {
-      id: "62bdc614ae62ea3f28d00bd6",
+      id: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "ProductDetail",
     component: ProductDetailPage,
     props: {
-      restaurantId: "62bdc614ae62ea3f28d00bd6",
+      restaurantId: "62bd7373c12cd4ee11bd7986",
     },
   },
   {
@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "OrderPage",
     component: OrderPage,
     props: {
-      restaurantId: "62bdc614ae62ea3f28d00bd6",
+      restaurantId: "62bd7373c12cd4ee11bd7986",
     },
   },
 ];

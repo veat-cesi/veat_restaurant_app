@@ -108,7 +108,7 @@ export default defineComponent({
         },
       ],
       orderList: [],
-      orderAcceptedList:[],
+      orderAcceptedList: [],
       socket: io('http://localhost:3010'),
     }
   },
@@ -116,11 +116,19 @@ export default defineComponent({
     getOrders: async function () {
       const response = await axios.get("http://localhost:3000/getOrderListByRestaurantId/" + this.restaurantId);
       this.orderList = response.data;
+      this.socket.on("refreshOrders", (data: any) => {
+        this.getOrders();
+        this.getAcceptedOrders();
+      })
     },
     getAcceptedOrders: async function () {
       const response = await axios.get("http://localhost:3000/getAcceptedOrderListByRestaurantId/" + this.restaurantId);
       this.orderAcceptedList = response.data;
       console.log(response.data)
+      this.socket.on("refreshOrders", (data: any) => {
+        this.getOrders();
+        this.getAcceptedOrders();
+      })
     },
     acceptOrder: async function (orderId: string) {
       this.socket.emit('orderAcceptedByRestaurant', {orderId: orderId, restaurantId: this.restaurantId});
@@ -140,10 +148,10 @@ export default defineComponent({
   mounted() {
     this.getOrders()
     this.getAcceptedOrders();
-    this.socket.on("refreshOrders", (data: any) => {
-      this.getOrders();
+    const interval = setInterval(() => {
+      this.getOrders()
       this.getAcceptedOrders();
-    })
+    }, 5000);
   }
 });
 </script>
