@@ -71,8 +71,10 @@ import {IonButton, IonCol, IonContent, IonPage, IonRow, IonText} from '@ionic/vu
 import {defineComponent} from 'vue';
 import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
-import axios from "axios";
+//import axios from "axios";
+import api from "../api/index"
 import {io} from "socket.io-client";
+import { Storage } from "@capacitor/storage"
 
 export default defineComponent({
   name: 'CommandPage',
@@ -113,12 +115,19 @@ export default defineComponent({
     }
   },
   methods: {
+    checkToken: async function () {
+      const token = await Storage.get({key : 'token'})
+      if (!token.value){
+        this.$router.push('/login')
+      }      
+    },
+
     getOrders: async function () {
-      const response = await axios.get("http://localhost:3000/getOrderListByRestaurantId/" + this.restaurantId);
+      const response = await api.get("http://localhost:3000/getOrderListByRestaurantId/" + this.restaurantId);
       this.orderList = response.data;
     },
     getAcceptedOrders: async function () {
-      const response = await axios.get("http://localhost:3000/getAcceptedOrderListByRestaurantId/" + this.restaurantId);
+      const response = await api.get("http://localhost:3000/getAcceptedOrderListByRestaurantId/" + this.restaurantId);
       this.orderAcceptedList = response.data;
       console.log(response.data)
     },
@@ -137,7 +146,13 @@ export default defineComponent({
       })
     }
   },
+
+  ionViewWillEnter() {
+    this.checkToken()
+  },
+
   mounted() {
+
     this.getOrders()
     this.getAcceptedOrders();
   }

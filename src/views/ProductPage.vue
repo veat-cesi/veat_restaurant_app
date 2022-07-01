@@ -61,6 +61,8 @@ import {defineComponent} from 'vue';
 import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import axios from "axios";
+import { Storage } from "@capacitor/storage"
+
 
 
 export default defineComponent({
@@ -119,6 +121,12 @@ export default defineComponent({
     }
   },
   methods: {
+    checkToken: async function () {
+      const token = await Storage.get({key : 'token'})
+      if (!token.value){
+        this.$router.push('/login')
+      }      
+    },
     getProduct: async function () {
       const response = await axios.get("http://localhost:3000/getProductsByRestaurantId/" + this.id);
       this.products = response.data;
@@ -143,6 +151,9 @@ export default defineComponent({
       const response = await axios.post("http://localhost:3000/deleteCategory", {product: product});
       this.products = response.data;
     },
+  },
+  ionViewWillEnter() {
+    this.checkToken()
   },
   mounted() {
     this.getProduct();

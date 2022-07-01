@@ -4,6 +4,11 @@ import ProductPage from "../views/ProductPage.vue";
 import OrderPage from "../views/OrderPage.vue";
 import RestaurantPage from "../views/RestaurantPage.vue";
 import ProductDetailPage from "../views/ProductDetailPage.vue";
+import LoginPage from '../views/LoginPage.vue'
+import RegisterPage from '../views/RegisterPage.vue'
+import CPU from '../views/CPU.vue'
+
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,6 +22,21 @@ const routes: Array<RouteRecordRaw> = [
     props: {
       id: "62bdc614ae62ea3f28d00bd6",
     },
+  },
+  {
+    path: '/cpu',
+    name: 'CPU',
+    component: CPU
+  },
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    component: RegisterPage
+  },
+  {
+    path:'/login',
+    name:'LoginPage',
+    component: LoginPage
   },
   {
     path: "/products",
