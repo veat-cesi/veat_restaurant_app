@@ -47,7 +47,10 @@ import {IonContent, IonPage, toastController} from '@ionic/vue';
 import {defineComponent} from 'vue';
 import {SidebarMenu} from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
-import axios from 'axios';
+//import axios from 'axios';
+import api from "../api/index"
+import { Storage } from "@capacitor/storage"
+
 
 
 export default defineComponent({
@@ -95,8 +98,14 @@ export default defineComponent({
     }
   },
   methods: {
+    checkToken: async function () {
+      const token = await Storage.get({key : 'token'})
+      if (!token.value){
+        this.$router.push('/login')
+      }      
+    },
     getRestaurant: async function () {
-      const response = await axios.get("http://localhost:3000/getRestaurantById/" + this.id)
+      const response = await api.get("http://localhost:3000/getRestaurantById/" + this.id)
       this.restaurant = response.data
     },
     async openToast() {
@@ -108,7 +117,7 @@ export default defineComponent({
       return toast.present();
     },
     submit: async function () {
-      const response = await axios.post("http://localhost:3000/updateRestaurant", {
+      const response = await api.post("http://localhost:3000/updateRestaurant", {
         restaurantId: this.restaurant.id,
         restaurant: this.restaurant
       });
@@ -133,6 +142,9 @@ export default defineComponent({
         console.log(this.restaurant.img)
       }
     },
+  },
+  ionViewWillEnter() {
+    this.checkToken()
   },
   mounted() {
     this.getRestaurant()

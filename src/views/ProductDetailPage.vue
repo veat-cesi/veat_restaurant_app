@@ -53,8 +53,11 @@ import {IonButton, IonCol, IonContent, IonPage, IonRow, IonText} from "@ionic/vu
 import {SidebarMenu} from "vue-sidebar-menu";
 import MealModal from "../components/MealModal.vue"
 import AddMealModal from "@/components/AddMealModal.vue";
-import axios from "axios";
+//import axios from "axios";
+import api from "../api/index"
 import {defineComponent} from "vue";
+import { Storage } from "@capacitor/storage"
+
 
 export default defineComponent({
   name: "ProductDetailPage",
@@ -101,12 +104,18 @@ export default defineComponent({
     }
   },
   methods: {
+    checkToken: async function () {
+      const token = await Storage.get({key : 'token'})
+      if (!token.value){
+        this.$router.push('/login')
+      }      
+    },
     getCategoryName: async function () {
-      const response = await axios.get("http://localhost:3000/getCategoryName/" + this.id);
+      const response = await api.get("http://localhost:3000/getCategoryName/" + this.id);
       this.category = response.data.category;
     },
     getProduct: async function () {
-      const response = await axios.get("http://localhost:3000/getProductList/" + this.id);
+      const response = await api.get("http://localhost:3000/getProductList/" + this.id);
       this.productList = response.data;
     },
     setOpenModal: function (state: boolean) {
@@ -116,9 +125,12 @@ export default defineComponent({
       this.isOpenAddModal = state
     },
     deleteMeal: async function (meal: any) {
-      const response = await axios.post("http://localhost:3000/deleteMeal", {meal: meal});
+      const response = await api.post("http://localhost:3000/deleteMeal", {meal: meal});
       this.productList = response.data;
     },
+  },
+  ionViewWillEnter() {
+    this.checkToken()
   },
   setup() {
     const route = useRoute();
